@@ -1,5 +1,6 @@
 import pyndn
 import json
+import time
 
 from pyndn import Data
 from pyndn import Interest
@@ -72,8 +73,9 @@ class NdnCtrl:
 
     def reply_(self, interest, response):
         if type(response) is Response: 
-            data = Data(interest.getName())
+            data = Data(interest.getName().appendTimestamp(self.microsecondTimestamp_()))
             data.setContent(json.dumps(response.payload_))
+            data.getMetaInfo().setFreshnessPeriod(100)
             self.keyChain_.sign(data)
             self.face_.putData(data)
         else:
@@ -82,4 +84,7 @@ class NdnCtrl:
 
     def onRegisterFailed_(self, prefix):
         print("Failed to register %s"%prefix)
+    
+    def microsecondTimestamp_(self):
+        return int(time.time()*1000)
 

@@ -13,7 +13,7 @@ counter=0
 def onResult(command, response):
     global counter
     counter += 1
-    print("Command %s recevied reply: %d %s"%(command, response.getCode(), response.getMessage()))
+    print("Command %s recevied reply: %d %s (%s)"%(command, response.getCode(), response.getMessage(), response.data_.getName().toUri()))
 
 ctrl.sendCommand("/eb/run/78/edge-master/start", {'prefix':'/eb/run/78/pov', 'width':640, 'height':360}, onResult)
 ctrl.sendCommand("/eb/run/78/edge-master/stop", None, onResult)
